@@ -30,12 +30,27 @@ app.get("/secure", verifyToken, (req, res) => {
   });
 });
 
+// orders endpoint with request validation
 app.post("/orders", verifyToken, (req, res) => {
   const { itemName, quantity } = req.body;
 
-  if (!itemName || !quantity) {
+  if (
+    !itemName ||
+    typeof itemName !== "string" ||
+    itemName.trim() === ""
+  ) {
     return res.status(400).json({
-      message: "itemName and quantity are required",
+      message: "Valid itemName is required",
+    });
+  }
+
+  if (
+    !quantity ||
+    typeof quantity !== "number" ||
+    quantity <= 0
+  ) {
+    return res.status(400).json({
+      message: "Valid quantity must be greater than 0",
     });
   }
 
