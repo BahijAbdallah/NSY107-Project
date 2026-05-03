@@ -1,63 +1,27 @@
-const jwt = require("jsonwebtoken");
+/**
+ * auth.js — JWT middleware and secret
+ * Exported so server.js stays clean and auth logic is reusable.
+ */
 
-const JWT_SECRET = "nsy107-secret-key"; // demo
+const jwt = require('jsonwebtoken');
 
-function login(req, res) {
-  const { username, password } = req.body;
-
-  if (username !== "admin" || password !== "123456") {
-    return res.status(401).json({
-      message: "Invalid username or password",
-    });
-  }
-
-  const token = jwt.sign(
-    {
-      username,
-      role: "admin",
-    },
-    JWT_SECRET,
-    {
-      expiresIn: "1h",
-    }
-  );
-
-  return res.json({
-    message: "Login successful",
-    token,
-  });
-}
+// In production: set JWT_SECRET as an EC2 environment variable.
+// The fallback string is for local demo only — never use it in production.
+const SECRET = process.env.JWT_SECRET || 'nsy107-secret-key';
 
 function verifyToken(req, res, next) {
-  const authHeader = req.headers.authorization;
-
-  if (!authHeader) {
-    return res.status(401).json({
-      message: "Missing Authorization header",
-    });
-  }
-
-  const token = authHeader.split(" ")[1];
+  const header = req.headers['authorization'] || '';
+  const token  = header.startsWith('Bearer ') ? header.slice(7) : null;
 
   if (!token) {
-    return res.status(401).json({
-      message: "Missing token",
-    });
+    return res.status(401).json({ error: 'No token provided' });
   }
-
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) {
-      return res.status(403).json({
-        message: "Invalid or expired token",
-      });
-    }
-
-    req.user = decoded;
+  try {
+    req.user = jwt.verify(token, SECRET);
     next();
-  });
+  } catch {
+    return res.status(403).json({ error: 'Invalid or expired token' });
+  }
 }
 
-module.exports = {
-  login,
-  verifyToken,
-};
+module.exports = { verifyToken, SECRET };
