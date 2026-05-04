@@ -1,0 +1,133 @@
+  Using classification threshold: 0.55
+============================================================
+ERROR ANALYSIS REPORT
+============================================================
+
+[1] OVERALL CONFUSION
+  TP (attack caught)  : 222
+  FP (false alarm)    : 11
+  FN (missed attack)  : 5
+  TN (correct normal) : 815
+  FN rate (missed/total attacks) : 0.022
+  FP rate (false alarm / normal) : 0.013
+
+[2] METRICS PER ATTACK TYPE
+
+  [flood]
+    Windows in test : 16 (attack=16, normal=0)
+    TP=16  FN=0  FP=0  TN=0
+    Recall    : 1.0000
+    Precision : 1.0000
+    F1        : 1.0000
+
+  [slow_brute]
+    Windows in test : 119 (attack=119, normal=0)
+    TP=118  FN=1  FP=0  TN=0
+    Recall    : 0.9916
+    Precision : 1.0000
+    F1        : 0.9958
+    *** MISSED 1 attack windows ***
+
+  [credential]
+    Windows in test : 51 (attack=51, normal=0)
+    TP=51  FN=0  FP=0  TN=0
+    Recall    : 1.0000
+    Precision : 1.0000
+    F1        : 1.0000
+
+  [recon]
+    Windows in test : 41 (attack=41, normal=0)
+    TP=37  FN=4  FP=0  TN=0
+    Recall    : 0.9024
+    Precision : 1.0000
+    F1        : 0.9487
+    *** MISSED 4 attack windows ***
+
+  Per-attack metrics saved -> C:\Users\User\Desktop\Cnam cours\NSY cloud\Project6_API_Anomaly_Detection\results\attack_type_metrics.csv
+
+[3] TOP 10 FALSE NEGATIVES (missed attacks)
+
+  FN #1  attack_type=recon  RF_prob=0.3916
+    max_latency=121.000  avg_gap_seconds=96.500  avg_latency=82.670  min_gap_seconds=46.000  latency_std=33.210  unique_routes=3.000  unique_status_codes=2.000  rolling2_unique_routes=2.000
+
+  FN #2  attack_type=recon  RF_prob=0.4302
+    avg_latency=124.000  max_latency=124.000  rolling2_unique_routes=2.500  prev_requests_per_route=1.670  rolling2_route_entropy=1.167  success_rate=1.000  requests_per_route=1.000  unique_status_codes=1.000
+
+  FN #3  attack_type=slow_brute  RF_prob=0.4557
+    avg_latency=81.000  max_latency=81.000  error_rate=1.000  forbidden_rate=1.000  requests_per_route=1.000  post_ratio=1.000  login_ratio=1.000  unique_status_codes=1.000
+
+  FN #4  attack_type=recon  RF_prob=0.4926
+    avg_latency=72.000  max_latency=72.000  rolling2_unique_routes=2.500  rolling2_route_entropy=1.292  error_rate=1.000  forbidden_rate=1.000  requests_per_route=1.000  post_ratio=1.000
+
+  FN #5  attack_type=recon  RF_prob=0.5423
+    max_latency=146.000  avg_latency=109.000  latency_std=26.700  avg_gap_seconds=18.500  min_gap_seconds=9.000  unique_routes=3.000  unique_status_codes=2.000  rolling2_unique_routes=2.000
+
+[4] TOP 10 FALSE POSITIVES (normal flagged as attack)
+
+  FP #1  RF_prob=0.8619
+    max_latency=90.000  avg_latency=87.000  avg_gap_seconds=35.000  min_gap_seconds=35.000  latency_std=3.000  unique_status_codes=2.000  unique_routes=2.000  rolling2_unique_routes=2.000
+
+  FP #2  RF_prob=0.7356
+    avg_latency=57.000  max_latency=57.000  error_rate=1.000  unauthorized_rate=1.000  requests_per_route=1.000  post_ratio=1.000  login_ratio=1.000  unique_status_codes=1.000
+
+  FP #3  RF_prob=0.7267
+    avg_latency=97.000  max_latency=97.000  rolling2_unique_routes=1.500  error_rate=1.000  unauthorized_rate=1.000  requests_per_route=1.000  unique_status_codes=1.000  unique_routes=1.000
+
+  FP #4  RF_prob=0.7213
+    avg_latency=120.000  max_latency=120.000  rolling2_unique_routes=2.000  prev_requests_per_route=1.500  error_rate=1.000  unauthorized_rate=1.000  requests_per_route=1.000  post_ratio=1.000
+
+  FP #5  RF_prob=0.6469
+    max_latency=116.000  avg_latency=85.670  avg_gap_seconds=28.000  latency_std=24.500  min_gap_seconds=5.000  unique_status_codes=3.000  unique_routes=3.000  route_entropy=1.585
+
+  FP #6  RF_prob=0.6340
+    max_latency=125.000  avg_latency=98.670  avg_gap_seconds=36.000  latency_std=20.850  min_gap_seconds=6.000  unique_status_codes=2.000  unique_routes=2.000  requests_per_route=1.500
+
+  FP #7  RF_prob=0.6036
+    max_latency=102.000  avg_latency=77.500  latency_std=24.500  avg_gap_seconds=21.000  min_gap_seconds=21.000  requests_per_route=2.000  prev_requests_per_route=1.500  rolling2_unique_routes=1.500
+
+  FP #8  RF_prob=0.6030
+    max_latency=91.000  avg_latency=74.670  avg_gap_seconds=37.500  min_gap_seconds=36.000  latency_std=13.470  prev_requests_per_route=3.000  unique_status_codes=2.000  unique_routes=2.000
+
+  FP #9  RF_prob=0.5913
+    avg_latency=157.000  max_latency=157.000  error_rate=1.000  requests_per_route=1.000  unique_status_codes=1.000  unique_routes=1.000  prev_requests_per_route=1.000  rolling2_unique_routes=1.000
+
+  FP #10  RF_prob=0.5847
+    avg_latency=45.000  max_latency=45.000  error_rate=1.000  unauthorized_rate=1.000  requests_per_route=1.000  unique_status_codes=1.000  unique_routes=1.000  prev_requests_per_route=1.000
+
+[5] FALSE POSITIVE FEATURE ANALYSIS
+  Feature means:  FP (falsely flagged normal) vs TN (correct normal)
+  Feature                    FP mean     TN mean   ratio FP/TN
+  error_rate                  0.8030      0.2972          2.70
+  unauthorized_rate           0.5606      0.0931          6.02
+  throttle_rate               0.0000      0.0297          0.00
+  forbidden_rate              0.0758      0.0555          1.36
+  success_rate                0.1970      0.7028          0.28
+  requests_per_route          1.1818      1.1368          1.04
+  avg_gap_seconds            14.8636     41.7936          0.36
+  min_gap_seconds             9.9091     38.8798          0.25
+  latency_std                 8.5745      6.7130          1.28
+  post_ratio                  0.5455      0.3643          1.50
+  login_ratio                 0.4091      0.1923          2.13
+  unique_status_codes         1.5455      1.2442          1.24
+  avg_latency                90.2282     78.7757          1.15
+  max_latency               100.0909     85.8294          1.17
+  unique_routes               1.5455      1.3828          1.12
+  route_entropy               0.4929      0.3618          1.36
+  route_switches_ratio        0.4091      0.3280          1.25
+  repeated_route_ratio        0.1061      0.0705          1.50
+  prev_requests_per_route      1.3182      1.1239          1.17
+  delta_requests_per_route     -0.1364      0.0129        -10.58
+  rolling2_unique_routes      1.4091      1.3031          1.08
+  rolling2_route_entropy      0.3905      0.2827          1.38
+  rolling2_error_rate         0.6667      0.2314          2.88
+
+[6] DIAGNOSIS
+  Hardest attack type: recon  (recall=0.9024  FN=4)
+  FN count by type:
+    recon: 4 missed
+    slow_brute: 1 missed
+    flood: 0 missed
+    credential: 0 missed
+
+  Plot: C:\Users\User\Desktop\Cnam cours\NSY cloud\Project6_API_Anomaly_Detection\results\figures\error_fn_fp_by_type.png
+  Plot: C:\Users\User\Desktop\Cnam cours\NSY cloud\Project6_API_Anomaly_Detection\results\figures\error_fp_feature_dist.png

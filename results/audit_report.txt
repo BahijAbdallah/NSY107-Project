@@ -1,0 +1,148 @@
+============================================================
+DATASET AUDIT REPORT
+============================================================
+
+[1] BASIC INFO
+  Shape         : 3558 rows x 24 columns
+  Columns       : ['window_start', 'request_count', 'success_count', 'error_count', 'status_401_count', 'status_403_count', 'status_429_count', 'avg_latency', 'max_latency', 'unique_routes', 'error_rate', 'unauthorized_rate', 'throttle_rate', 'forbidden_rate', 'success_rate', 'requests_per_route', 'avg_gap_seconds', 'min_gap_seconds', 'latency_std', 'post_ratio', 'login_ratio', 'unique_status_codes', 'label', 'attack_type']
+  Feature cols  : ['error_rate', 'unauthorized_rate', 'throttle_rate', 'forbidden_rate', 'success_rate', 'requests_per_route', 'avg_gap_seconds', 'min_gap_seconds', 'latency_std', 'post_ratio', 'login_ratio', 'unique_status_codes', 'avg_latency', 'max_latency', 'unique_routes']
+  Target col    : label
+
+  dtypes:
+window_start               str
+request_count            int64
+success_count            int64
+error_count              int64
+status_401_count         int64
+status_403_count         int64
+status_429_count         int64
+avg_latency            float64
+max_latency              int64
+unique_routes            int64
+error_rate             float64
+unauthorized_rate      float64
+throttle_rate          float64
+forbidden_rate         float64
+success_rate           float64
+requests_per_route     float64
+avg_gap_seconds        float64
+min_gap_seconds        float64
+latency_std            float64
+post_ratio             float64
+login_ratio            float64
+unique_status_codes      int64
+label                    int64
+attack_type                str
+
+[2] CLASS DISTRIBUTION
+  Normal (0) : 2,447  (68.8%)
+  Attack (1) : 1,111  (31.2%)
+  Imbalance  : 2.2:1
+  Saved: audit_01_class_distribution.png
+
+[3] DATA QUALITY
+  Duplicate rows  : 0
+  Missing values  :
+error_rate             0
+unauthorized_rate      0
+throttle_rate          0
+forbidden_rate         0
+success_rate           0
+requests_per_route     0
+avg_gap_seconds        0
+min_gap_seconds        0
+latency_std            0
+post_ratio             0
+login_ratio            0
+unique_status_codes    0
+avg_latency            0
+max_latency            0
+unique_routes          0
+label                  0
+
+[4] FEATURE MEANS BY CLASS
+            feature  normal_mean  normal_std  attack_mean  attack_std
+         error_rate        0.329       0.413        0.861       0.223
+  unauthorized_rate        0.089       0.255        0.653       0.360
+      throttle_rate        0.045       0.193        0.024       0.081
+     forbidden_rate        0.061       0.214        0.103       0.192
+       success_rate        0.671       0.413        0.139       0.223
+ requests_per_route        1.221       0.416        2.392       1.655
+    avg_gap_seconds       59.613      68.409       37.898      35.971
+    min_gap_seconds       55.400      68.558       21.833      36.431
+        latency_std        9.773      11.308       20.295      14.184
+         post_ratio        0.393       0.403        0.682       0.299
+        login_ratio        0.190       0.326        0.633       0.338
+unique_status_codes        1.323       0.510        1.976       1.177
+        avg_latency       79.437      24.312      106.120      22.658
+        max_latency       89.650      26.846      133.095      32.150
+      unique_routes        1.513       0.582        1.862       0.891
+
+  Saved: audit_02_feature_distributions.png
+
+[5] FEATURE-LABEL CORRELATION (point-biserial r)
+            feature       r  p_value
+  unauthorized_rate  0.6673 0.000000
+        max_latency  0.5756 0.000000
+         error_rate  0.5601 0.000000
+        login_ratio  0.5282 0.000000
+ requests_per_route  0.4819 0.000000
+        avg_latency  0.4610 0.000000
+        latency_std  0.3692 0.000000
+unique_status_codes  0.3608 0.000000
+         post_ratio  0.3377 0.000000
+      unique_routes  0.2271 0.000000
+     forbidden_rate  0.0927 0.000000
+      throttle_rate -0.0573 0.000627
+    avg_gap_seconds -0.1649 0.000000
+    min_gap_seconds -0.2495 0.000000
+       success_rate -0.5601 0.000000
+  Saved: audit_03_feature_correlation.png
+
+[6] SINGLE-FEATURE SEPARABILITY (AUROC)
+            feature  auroc
+  unauthorized_rate 0.8893
+        max_latency 0.8586
+         error_rate 0.8216
+       success_rate 0.8216
+        login_ratio 0.8170
+        avg_latency 0.8018
+ requests_per_route 0.7797
+        latency_std 0.7214
+         post_ratio 0.7021
+unique_status_codes 0.6479
+     forbidden_rate 0.6089
+      unique_routes 0.5982
+    min_gap_seconds 0.5749
+    avg_gap_seconds 0.5229
+      throttle_rate 0.5228
+  Saved: audit_05_single_feature_separability.png
+
+[7] RANDOM FOREST FEATURE IMPORTANCES (full dataset)
+            feature  importance
+  unauthorized_rate    0.210358
+        max_latency    0.141422
+        login_ratio    0.107206
+       success_rate    0.106018
+         error_rate    0.090249
+        avg_latency    0.083223
+ requests_per_route    0.074806
+        latency_std    0.050076
+    avg_gap_seconds    0.037907
+    min_gap_seconds    0.030362
+         post_ratio    0.029522
+     forbidden_rate    0.012510
+unique_status_codes    0.011392
+      unique_routes    0.011297
+      throttle_rate    0.003652
+  Saved: audit_04_feature_importance.png
+
+[8] DATA LEAKAGE CHECK
+  'label' in FEATURE_COLS : False  (should be False)
+  Extra columns           : ['window_start', 'request_count', 'success_count', 'error_count', 'status_401_count', 'status_403_count', 'status_429_count', 'attack_type']
+  OK: no direct label leakage detected.
+
+[9] ROOT CAUSE DIAGNOSIS
+  Top single-feature separator: 'unauthorized_rate' (AUROC=0.8893)
+  VERDICT: No single feature achieves AUROC >= 0.95.
+  Dataset has sufficient overlap. F1=1.0 would be surprising.

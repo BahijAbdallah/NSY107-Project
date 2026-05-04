@@ -1,0 +1,26 @@
+BEST MODEL SELECTION
+========================================
+
+Winner: Hist GradientBoosting
+
+Selection criteria: highest F1 with Recall >= 0.60 and FPR <= 0.30
+
+Metrics:
+  model: Hist GradientBoosting
+  accuracy: 0.9858
+  precision: 0.9454
+  recall: 0.9912
+  f1: 0.9677
+  roc_auc: 0.9993
+  fpr: 0.0157
+  tn: 813
+  fp: 13
+  fn: 2
+  tp: 225
+
+All model results:
+                model  accuracy  precision  recall     f1  roc_auc    fpr  tn  fp  fn  tp
+        Random Forest    0.9820     0.9370  0.9824 0.9591   0.9992 0.0182 811  15   4 223
+Hist GradientBoosting    0.9858     0.9454  0.9912 0.9677   0.9993 0.0157 813  13   2 225
+     Isolation Forest    0.9601     0.8776  0.9471 0.9110   0.9939 0.0363 796  30  12 215
+          Autoencoder    0.9468     0.8379  0.9339 0.8833   0.9871 0.0496 785  41  15 212
