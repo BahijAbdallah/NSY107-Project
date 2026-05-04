@@ -9,19 +9,60 @@ const jwt = require('jsonwebtoken');
 // The fallback string is for local demo only — never use it in production.
 const SECRET = process.env.JWT_SECRET || 'nsy107-secret-key';
 
+const USERS = {
+  admin: "123456",
+};
+
+function login(req,res){
+  const{username, password} =req.body || {};
+  if(!username || !password){
+    return res.status(400).json({
+      message: "Username and password are required",
+    });
+  }
+
+  if (USERS[username] !==password){
+    return res.status(401).json({
+      message: "Invalid username or password",
+    });
+  }
+  const token = jwt.sign(
+    {
+      username,
+      role: "admin",
+    },
+    SECRET,
+    {
+      expiresIn: "1h",
+    }
+  );
+  
+  return res.json({
+    message: "Login successful",
+    token,
+  });
+}
+
+
 function verifyToken(req, res, next) {
   const header = req.headers['authorization'] || '';
-  const token  = header.startsWith('Bearer ') ? header.slice(7) : null;
 
-  if (!token) {
-    return res.status(401).json({ error: 'No token provided' });
+  if (!header.startsWith("Bearer ")) {
+    return res.status(401).json({
+      message: "Missing or invalid Authorization header",
+    });
   }
+
+  const token = header.slice(7);
+  
   try {
     req.user = jwt.verify(token, SECRET);
     next();
   } catch {
-    return res.status(403).json({ error: 'Invalid or expired token' });
+    return res.status(403).json({
+      message: "Invalid or expired token",
+    });
   }
 }
 
-module.exports = { verifyToken, SECRET };
+module.exports = { login, verifyToken };
