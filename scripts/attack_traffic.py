@@ -18,7 +18,7 @@ import time
 import random
 
 # ── Change this to your API Gateway URL or http://localhost:3000 ──
-API_BASE_URL = "http://localhost:3000"
+API_BASE_URL = "https://3fuaxiet0j.execute-api.us-east-1.amazonaws.com"
 
 _valid_token = None   # obtained once for mixed-attack scenarios
 
