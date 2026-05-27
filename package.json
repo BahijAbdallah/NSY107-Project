@@ -1,0 +1,21 @@
+{
+  "name": "nsy107-project-6",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "backend",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev --workspace backend\" \"npm run dev --workspace client\"",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:client": "npm run dev --workspace client",
+    "start": "npm run start --workspace backend",
+    "build": "npm run build --workspace client",
+    "preview": "npm run preview --workspace client"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "nodemon": "^3.1.0"
+  }
+}
