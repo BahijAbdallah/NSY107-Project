@@ -36,5 +36,4 @@ Thumbs.db
 
 # Claude Code internal
 .claude/
-requirements.txt
 PROJECT_EXPLANATION_FOR_DOCTOR.txt
