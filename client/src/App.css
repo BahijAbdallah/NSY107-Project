@@ -70,12 +70,42 @@ input:focus {
   padding: 32px 0 48px;
 }
 
+.navbar,
 .topbar {
   align-items: flex-start;
   display: flex;
   gap: 24px;
   justify-content: space-between;
   margin-bottom: 20px;
+}
+
+.navbar {
+  align-items: center;
+  border-bottom: 1px solid #d9e2ef;
+  padding-bottom: 18px;
+}
+
+.navbar h1 {
+  margin-bottom: 0;
+}
+
+.nav-links {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.nav-links a {
+  border-radius: 6px;
+  color: #34445a;
+  font-weight: 800;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+}
+
+.nav-links a.active {
+  background: #1d4ed8;
+  color: #ffffff;
 }
 
 .eyebrow {
@@ -147,10 +177,12 @@ h2 {
 }
 
 .api-base {
+  align-self: stretch;
   background: #eaf0f8;
   border: 1px solid #d2ddeb;
   border-radius: 8px;
   color: #34445a;
+  flex: 1;
   margin-bottom: 20px;
   padding: 12px 14px;
 }
@@ -218,13 +250,92 @@ h2 {
   color: #94a3b8;
 }
 
+.analysis-page {
+  display: grid;
+  gap: 18px;
+}
+
+.page-intro,
+.analysis-form,
+.result-panel,
+.error-box {
+  background: #ffffff;
+  border: 1px solid #d9e2ef;
+  border-radius: 8px;
+  box-shadow: 0 14px 28px rgba(15, 23, 42, 0.06);
+  padding: 18px;
+}
+
+.page-intro p,
+.error-box p {
+  color: #5b6d84;
+  line-height: 1.5;
+  margin-bottom: 0;
+}
+
+.analysis-form {
+  align-items: end;
+  display: grid;
+  gap: 14px;
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+.analysis-form label {
+  color: #34445a;
+  display: grid;
+  font-size: 0.9rem;
+  font-weight: 700;
+  gap: 7px;
+}
+
+.error-box {
+  border-color: #fecaca;
+  background: #fff5f5;
+  color: #991b1b;
+}
+
+.error-box p {
+  color: #991b1b;
+  margin-top: 8px;
+}
+
+.result-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.result-panel h2 {
+  border-bottom: 1px solid #e6edf6;
+  margin-bottom: 0;
+  padding: 18px;
+}
+
+.analysis-output {
+  min-height: 420px;
+}
+
 @media (max-width: 820px) {
+  .navbar,
   .topbar {
     flex-direction: column;
   }
 
+  .nav-links {
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .nav-links a {
+    flex: 1;
+    text-align: center;
+  }
+
   .status-panel {
     width: 100%;
+  }
+
+  .analysis-form {
+    grid-template-columns: 1fr;
   }
 
   .grid {

@@ -1,13 +1,14 @@
 import os
 import json
 import argparse
+from pyexpat import model
 import numpy as np
 import pandas as pd
 import joblib
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-MODEL_PATH = os.path.join(ROOT, "models", "gradient_boosting.joblib")
+MODEL_PATH = os.path.join(ROOT, "models", "isolation_forest.joblib")
 SCALER_PATH = os.path.join(ROOT, "data", "scaler.joblib")
 
 FEATURE_COLS = [
@@ -178,10 +179,11 @@ def main():
     print(f"[INFO] Feature windows: {len(features)}")
 
     X = features[FEATURE_COLS].fillna(0)
-    X_scaled = scaler.transform(X)
+    X_scaled = scaler.transform(X.values)
 
-    probabilities = model.predict_proba(X_scaled)[:, 1]
-    predictions = (probabilities >= THRESHOLD).astype(int)
+    raw_predictions = model.predict(X_scaled)
+    predictions = np.where(raw_predictions == -1, 1, 0)
+    probabilities = -model.score_samples(X_scaled)
 
     print("\n========== AWS LOG ANOMALY DETECTION RESULTS ==========")
 
@@ -191,7 +193,7 @@ def main():
         print(f"\n[{result}]")
         print(f"IP: {row['ip']}")
         print(f"Window: {row['window']}")
-        print(f"Anomaly probability: {probabilities[i]:.4f}")
+        print(f"Anomaly score: {probabilities[i]:.4f}")
         print(
             f"error_rate={row['error_rate']:.2f}, "
             f"401_rate={row['unauthorized_rate']:.2f}, "

@@ -12,11 +12,39 @@
 
 const express = require("express");
 const cors    = require("cors");
+const fs = require("fs");
+const path = require("path");
+const multer = require("multer");
+const { spawn } = require("child_process");
 const { login, verifyToken } = require("./auth");
 const jwt = require('jsonwebtoken');
 
 const app  = express();
 const PORT = process.env.PORT || 3000;
+const PROJECT_ROOT = path.join(__dirname, "..");
+const UPLOAD_DIR = path.join(__dirname, "uploads");
+const PYTHON_COMMAND = process.env.PYTHON || "python";
+
+fs.mkdirSync(UPLOAD_DIR, { recursive: true });
+
+const upload = multer({
+  dest: UPLOAD_DIR,
+  limits: {
+    fileSize: 10 * 1024 * 1024,
+  },
+  fileFilter: (req, file, cb) => {
+    const isCsv =
+      path.extname(file.originalname).toLowerCase() === ".csv" ||
+      file.mimetype === "text/csv" ||
+      file.mimetype === "application/vnd.ms-excel";
+
+    if (!isCsv) {
+      return cb(new Error("Only CSV files are allowed"));
+    }
+
+    return cb(null, true);
+  },
+});
 
 app.use(cors());
 app.use(express.json());
@@ -95,6 +123,81 @@ app.post("/orders", verifyToken, (req, res) => {
       createdBy: req.user.username,
       timestamp: new Date().toISOString(),
     },
+  });
+});
+
+function runLogAnalysis(req, res) {
+  if (!req.file) {
+    return res.status(400).json({
+      success: false,
+      output: "",
+      error: "CSV file is required",
+    });
+  }
+
+  const scriptPath = path.join(PROJECT_ROOT, "src", "aws_logs_to_predictions.py");
+  const csvPath = req.file.path;
+  let stdout = "";
+  let stderr = "";
+  let responseSent = false;
+
+  const child = spawn(PYTHON_COMMAND, [scriptPath, "--csv", csvPath], {
+    cwd: PROJECT_ROOT,
+    windowsHide: true,
+  });
+
+  child.stdout.on("data", (chunk) => {
+    stdout += chunk.toString();
+  });
+
+  child.stderr.on("data", (chunk) => {
+    stderr += chunk.toString();
+  });
+
+  child.on("error", (error) => {
+    responseSent = true;
+    fs.unlink(csvPath, () => {});
+    return res.status(500).json({
+      success: false,
+      output: stdout,
+      error: `Failed to start Python analysis: ${error.message}`,
+    });
+  });
+
+  child.on("close", (code) => {
+    if (responseSent) {
+      return;
+    }
+
+    fs.unlink(csvPath, () => {});
+
+    if (code !== 0) {
+      return res.status(500).json({
+        success: false,
+        output: stdout,
+        error: stderr || `Python analysis exited with code ${code}`,
+      });
+    }
+
+    return res.json({
+      success: true,
+      output: stdout,
+      error: stderr,
+    });
+  });
+}
+
+app.post("/analyze-logs", (req, res) => {
+  upload.single("csvFile")(req, res, (error) => {
+    if (error) {
+      return res.status(400).json({
+        success: false,
+        output: "",
+        error: error.message,
+      });
+    }
+
+    return runLogAnalysis(req, res);
   });
 });
 
