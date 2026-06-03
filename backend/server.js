@@ -23,7 +23,8 @@ const app  = express();
 const PORT = process.env.PORT || 3000;
 const PROJECT_ROOT = path.join(__dirname, "..");
 const UPLOAD_DIR = path.join(__dirname, "uploads");
-const PYTHON_COMMAND = process.env.PYTHON || "python";
+const pythonCmd = process.platform === "win32" ? "python" : "python3";
+const PYTHON_COMMAND = process.env.PYTHON || pythonCmd;
 
 fs.mkdirSync(UPLOAD_DIR, { recursive: true });
 
